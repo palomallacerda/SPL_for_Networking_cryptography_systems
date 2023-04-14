@@ -22,6 +22,10 @@ def menu(action, user_message, return_message, key):
             console.print('\nGive me a key with minimum 4 caracters', style='bold red')
             key = input('>> ')
             sck.sendall(key.encode('utf-8'))
+            console.print('\nChoose a encryption Method', style='bold red')
+            console.print('\nA) AES\n B) Blowfish\n', style='bold red')
+            encp_method = input('>> ')
+            sck.sendall(encp_method.encode('utf-8'))
             return_message = sck.recv(1024)
             with Progress() as progress:
                         taks_1 = progress.add_task("[yellow]Processing....", total=100)
@@ -42,6 +46,11 @@ def menu(action, user_message, return_message, key):
                 console.print('\nGive me a key with minimum 4 caracters', style='bold red')
                 key = input('>> ')
                 sck.sendall(key.encode('utf-8'))
+                
+                console.print('\nChoose a decode method\nA) AES\nB) Blowfish', style='bold red')
+                encp_method = input('>> ')
+                sck.sendall(encp_method.encode('utf-8'))
+                
                 decrypted_message = sck.recv(1024)
                 decrypted_message = decrypted_message.decode()
                 with Progress() as progress:
@@ -56,6 +65,7 @@ def menu(action, user_message, return_message, key):
                     console.print("\nFollow these steps:\n", style='Green')
                     console.print("\n--> Verify if the typed key matches the true decoder key\n", style='Green')
                     console.print("\n--> Verify if your message is corretly encrypted or mistyped\n", style='Green')
+                    console.print("\n--> Verify if you've tried to decode with the correct method\n", style='Green')               
                     time.sleep(1)
                     console.print("NOW, TRY AGAIN....", style='bold yellow')
                 else:
