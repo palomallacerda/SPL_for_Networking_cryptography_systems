@@ -3,6 +3,8 @@ import argparse
 import threading
 import blowfish
 import AES
+import RSA
+import TripleDes
 
 parser = argparse.ArgumentParser(description = "This is the server for the multithreaded socket demo!")
 parser.add_argument('--host', metavar = 'host', type = str, nargs = '?', default = socket.gethostname())
@@ -34,10 +36,12 @@ def on_new_client(i, client, connection, client_message, key, encrypted_message,
 			encp_method = client.recv(1024)
 			print(f"The client message is: {client_message}\n and key:{key}\n")
 			if(encp_method == 'A') or (encp_method == 'a'):
-				print(f"The Crypthograph chosen was: AES\n")
 				encrypted_message = AES.encrypt(client_message, key)
+			if(encp_method == 'C') or (encp_method == 'c'):
+				encrypted_message = RSA.encrypt(client_message, key)
+			if(encp_method == 'd') or (encp_method == 'D'):
+				encrypted_message = TripleDes.encrypt(client_message, key)
 			else:
-				print(f"The Crypthograph chosen was: Blowfish\n")
 				encrypted_message = blowfish.encrypt_message(client_message, key)
 			print(f"We are sending the encrypted message: {encrypted_message[1].decode()}")
 			print(f"With key: {encrypted_message[0].decode()}")
@@ -51,6 +55,12 @@ def on_new_client(i, client, connection, client_message, key, encrypted_message,
 				if(encp_method == 'A') or (encp_method == 'a'):
 					print(f"The Crypthograph chosen was: AES\n")
 					return_message = AES.decrypt(user_encrypted_message.decode(), user_encrypted_key)
+				if(encp_method == 'C') or (encp_method == 'c'):
+					print(f"The Crypthograph chosen was: RSA\n")
+					encrypted_message = RSA.decrypt(client_message, key)
+				if(encp_method == 'd') or (encp_method == 'D'):
+					print(f"The Crypthograph chosen was: TripleDes\n")
+					encrypted_message = TripleDes.decrypt(client_message, key)
 				else:
 					print(f"The Crypthograph chosen was: Blowfish\n")
 					return_message = blowfish.decrypt_message(user_encrypted_key, user_encrypted_message.decode())

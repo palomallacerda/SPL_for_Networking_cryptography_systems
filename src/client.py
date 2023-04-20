@@ -19,13 +19,16 @@ def menu(action, user_message, return_message, key):
             console.print('\nGive me a message', style='bold red')
             user_message = input('>> ')
             sck.sendall(user_message.encode('utf-8'))
-            console.print('\nGive me a key with minimum 4 caracters', style='bold red')
+            console.print('\nGive me a key with minimum 8 caracters', style='bold red')
             key = input('>> ')
             sck.sendall(key.encode('utf-8'))
             console.print('\nChoose a encryption Method', style='bold red')
-            console.print('\nA) AES\n B) Blowfish\n', style='bold red')
+            console.print('\nA) AES\nB) Blowfish\nC) RSA\nD) TripleDes', style='bold red')
             encp_method = input('>> ')
-            sck.sendall(encp_method.encode('utf-8'))
+
+            if((encp_method == 'A') or (encp_method == 'a') or (encp_method == 'b') or  (encp_method == 'B' ) or (encp_method == 'C' ) or (encp_method == 'c')) or (encp_method == 'd') or (encp_method == 'D'):
+                sck.sendall(encp_method.encode('utf-8'))
+
             return_message = sck.recv(1024)
             with Progress() as progress:
                         taks_1 = progress.add_task("[yellow]Processing....", total=100)
