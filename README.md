@@ -3,7 +3,7 @@
 A software product line with foucos on messages cryptography methods using networking concepts such as socket, network architecture, transport protocols.
 
 ## What can it do
-- Encrypt a given message using blowfish technique. See more info [here](https://pycryptodome.readthedocs.io/en/latest/src/cipher/blowfish.html)
+- Encrypt a given message using blowfish, AES, RSA and TripleDes techniques.
 - Decrypt a given message
 - Perform multithread server connection, encrypting/decrypting multiple clients messages
 
