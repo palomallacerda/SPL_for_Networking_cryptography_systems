@@ -6,7 +6,7 @@ import time
 
 console = Console()
 
-def menu(action, user_message, return_message, key):
+def menu(action, user_message, return_message, key, encp_method):
         console.print(" ╔╦╦╦═╦╗╔═╦═╦══╦═╗╔══╦═╗╔═╦╗╔═╦╦╦╦═╦╦══╦╦╗", style='bold red')
         console.print(" ║║║║╦╣╚╣╠╣║║║║║╦╣╚╗╔╣║║║╣╣╚╣║║║║║╔╣╠╗╚╣═║", style='bold red')
         console.print(" ╚══╩═╩═╩═╩═╩╩╩╩═╝.╚╝╚═╝╚═╩═╩═╩══╩╝╚╩══╩╩╝", style='bold red')
@@ -19,9 +19,16 @@ def menu(action, user_message, return_message, key):
             console.print('\nGive me a message', style='bold red')
             user_message = input('>> ')
             sck.sendall(user_message.encode('utf-8'))
-            console.print('\nGive me a key with minimum 4 caracters', style='bold red')
+            console.print('\nGive me a key with minimum 8 caracters', style='bold red')
             key = input('>> ')
             sck.sendall(key.encode('utf-8'))
+            console.print('\nChoose a encryption Method', style='bold red')
+            console.print('\nA) AES\nB) Blowfish\nC) RSA\nD) TripleDes', style='bold red')
+            encp_method = input('>> ')
+
+            if((encp_method == 'A') or (encp_method == 'a') or (encp_method == 'b') or  (encp_method == 'B' ) or (encp_method == 'C' ) or (encp_method == 'c')) or (encp_method == 'd') or (encp_method == 'D'):
+                sck.sendall(encp_method.encode('utf-8'))
+
             return_message = sck.recv(1024)
             with Progress() as progress:
                         taks_1 = progress.add_task("[yellow]Processing....", total=100)
@@ -39,10 +46,22 @@ def menu(action, user_message, return_message, key):
                 console.print('\nGive me a encrypted message', style='bold red')
                 user_message = input('>> ')
                 sck.sendall(user_message.encode('utf-8'))
-                console.print('\nGive me a key with minimum 4 caracters', style='bold red')
+                console.print('\nGive me a key with minimum 8 caracters', style='bold red')
                 key = input('>> ')
+                
                 sck.sendall(key.encode('utf-8'))
-                decrypted_message = sck.recv(1024)
+                
+                console.print('\nA) AES\nB) Blowfish\nC) RSA\nD) TripleDes', style='bold red')
+                encp_method1 = input('>> ')
+                if(encp_method == encp_method1):
+                    if((encp_method1 == 'A') or (encp_method1 == 'a') or (encp_method1 == 'b') or  (encp_method1 == 'B' ) or (encp_method1 == 'C' ) or (encp_method1 == 'c')) or (encp_method1 == 'd') or (encp_method1 == 'D'):
+                        sck.sendall(encp_method1.encode('utf-8'))
+                        decrypted_message = sck.recv(1024)
+                else:
+                    sck.sendall(' '.encode('utf-8'))
+                    console.print("\nDifferents methods of encoding and decoding\n", style='bold yellow')
+                    decrypted_message = ' '.encode()
+
                 decrypted_message = decrypted_message.decode()
                 with Progress() as progress:
                     taks_1 = progress.add_task("[yellow]Processing....", total=100)
@@ -56,6 +75,7 @@ def menu(action, user_message, return_message, key):
                     console.print("\nFollow these steps:\n", style='Green')
                     console.print("\n--> Verify if the typed key matches the true decoder key\n", style='Green')
                     console.print("\n--> Verify if your message is corretly encrypted or mistyped\n", style='Green')
+                    console.print("\n--> Verify if you've tried to decode with the correct method\n", style='Green')               
                     time.sleep(1)
                     console.print("NOW, TRY AGAIN....", style='bold yellow')
                 else:
@@ -74,7 +94,7 @@ def menu(action, user_message, return_message, key):
         else:
             console.print("Wrong input try again", style='bold yellow')
             time.sleep(0.5)
-        menu(action, user_message, return_message, key)
+        menu(action, user_message, return_message, key, encp_method)
 
 parser = argparse.ArgumentParser(description="This is a client for multthreads connections")
 parser.add_argument('--host', metavar= 'host', type= str, nargs='?', default= socket.gethostname())
@@ -92,5 +112,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sck:
         user_message = ''
         return_message = ''
         key = ''
-        shut = menu(action, user_message, return_message,key)
+        encp_method = ''
+        shut = menu(action, user_message, return_message,key,encp_method)
         break
