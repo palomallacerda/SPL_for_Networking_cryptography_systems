@@ -53,18 +53,13 @@ def on_new_client(i, client, connection, client_message, key, encrypted_message,
 			print(f"Decoding the client message: {user_encrypted_message.decode()}\n with key:{user_encrypted_key}\n")
 			try:
 				if(encp_method == 'A') or (encp_method == 'a'):
-					print(f"The Crypthograph chosen was: AES\n")
 					return_message = AES.decrypt(user_encrypted_message.decode(), user_encrypted_key)
 				if(encp_method == 'C') or (encp_method == 'c'):
-					print(f"The Crypthograph chosen was: RSA\n")
-					encrypted_message = RSA.decrypt(client_message, key)
+					return_message = RSA.decrypt(client_message, key)
 				if(encp_method == 'd') or (encp_method == 'D'):
-					print(f"The Crypthograph chosen was: TripleDes\n")
-					encrypted_message = TripleDes.decrypt(client_message, key)
+					return_message = TripleDes.decrypt(client_message, key)
 				else:
-					print(f"The Crypthograph chosen was: Blowfish\n")
 					return_message = blowfish.decrypt_message(user_encrypted_key, user_encrypted_message.decode())
-			
 				print(f"Sending decoded message:{return_message}")
 				client.sendall(return_message.encode())
 			except Exception as e:
